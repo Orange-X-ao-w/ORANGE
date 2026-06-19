@@ -1,170 +1,159 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ORANGE橙子科技工作室</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Microsoft YaHei', Arial, sans-serif;
-            background-color: #f5f5f5;
-            color: #333;
-            line-height: 1.6;
-            padding: 20px;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        header {
-            text-align: center;
-            margin-bottom: 40px;
-            padding: 20px 0;
-        }
-        
-        .logo-text {
-            font-size: 3.5rem;
-            font-weight: bold;
-            color: #FF6600;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-            letter-spacing: 2px;
-        }
-        
-        .up-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 30px;
-        }
-        
-        .up-card {
-            background-color: white;
-            border-radius: 10px;
-            width: 250px;
-            padding: 25px 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-            border: 2px solid #FF6600;
-            transition: all 0.3s ease;
-            text-align: center;
-        }
-        
-        .up-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.12);
-        }
-        
-        .up-name {
-            font-size: 1.8rem;
-            font-weight: bold;
-            margin-bottom: 15px;
-            color: #333;
-        }
-        
-        .up-link {
-            display: inline-block;
-            background-color: #FF6600;
-            color: white;
-            text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            font-size: 1rem;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            margin-top: 10px;
-        }
-        
-        .up-link:hover {
-            background-color: #E55A00;
-            transform: scale(1.05);
-        }
-        
-        .bilibili-icon {
-            color: #FB7299;
-            font-size: 1.2rem;
-            margin-right: 5px;
-        }
-        
-        footer {
-            text-align: center;
-            margin-top: 50px;
-            padding: 20px 0;
-            color: #666;
-            font-size: 0.9rem;
-        }
-        
-        @media (max-width: 768px) {
-            .logo-text {
-                font-size: 2.5rem;
-            }
-            
-            .up-card {
-                width: 100%;
-                max-width: 300px;
-            }
-            
-            .up-container {
-                gap: 20px;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ORANGE橙子科技工作室</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: 'Microsoft YaHei', Arial, sans-serif;
+  background-color: #f5f5f5;
+  color: #333;
+  line-height: 1.6;
+  padding: 20px;
+}
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+header {
+  text-align: center;
+  margin-bottom: 40px;
+  padding: 20px 0;
+}
+.logo-text {
+  font-size: 3.5rem;
+  font-weight: bold;
+  color: #FF6600;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+  letter-spacing: 2px;
+}
+.up-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+}
+.up-card {
+  background-color: white;
+  border-radius: 10px;
+  width: 250px;
+  padding: 25px 20px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+  border: 2px solid #FF6600;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+.up-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+}
+.up-name {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #333;
+}
+.up-link {
+  display: inline-block;
+  background-color: #FF6600;
+  color: white;
+  text-decoration: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+}
+.up-link:hover {
+  background-color: #E55A00;
+  transform: scale(1.05);
+}
+.bilibili-icon {
+  color: #FB7299;
+  font-size: 1.2rem;
+  margin-right: 5px;
+}
+footer {
+  text-align: center;
+  margin-top: 50px;
+  padding: 20px 0;
+  color: #666;
+  font-size: 0.9rem;
+}
+@media (max-width: 768px) {
+  .logo-text {
+    font-size: 2.5rem;
+  }
+  .up-card {
+    width: 100%;
+    max-width: 300px;
+  }
+  .up-container {
+    gap: 20px;
+  }
+}
+</style>
 </head>
+
 <body>
-    <div class="container">
-        <header>
-            <h1 class="logo-text">ORANGE橙子</h1>
-        </header>
-        
-        <main>
-            <div class="up-container">
-                <!-- 小奥X-ao -->
-                <div class="up-card">
-                    <div class="up-name">小奥X-ao</div>
-                    <p>B站UP主</p>
-                    <a href="https://space.bilibili.com/3546879352637901?spm_id_from=333.1007.0.0" target="_blank" class="up-link">
-                        <span class="bilibili-icon">▶</span> 访问主页
-                    </a>
-                </div>
-                
-                <!-- Wjin1008依叁P -->
-                <div class="up-card">
-                    <div class="up-name">ORANGE官方</div>
-                    <p>B站UP主</p>
-                    <a href="https://space.bilibili.com/3493138045863993?spm_id_from=333.1007.0.0" target="_blank" class="up-link">
-                        <span class="bilibili-icon">▶</span> 访问主页
-                    </a>
-                </div>
-                
-                <!-- ORANGE官方 -->
-                <div class="up-card">
-                    <div class="up-name">ORANGE官方</div>
-                    <p>B站UP主</p>
-                    <a href="https://space.bilibili.com/3706976248793102?spm_id_from=333.337.0.0" target="_blank" class="up-link">
-                        <span class="bilibili-icon">▶</span> 访问主页
-                    </a>
-                </div>
-                
-                <!-- ORANGE小助手 -->
-                <div class="up-card">
-                    <div class="up-name">ORANGE小助手</div>
-                    <p>B站UP主</p>
-                    <a href="https://space.bilibili.com/3706977047808203?spm_id_from=333.337.0.0" target="_blank" class="up-link">
-                        <span class="bilibili-icon">▶</span> 访问主页
-                    </a>
-                </div>
-            </div>
-        </main>
-        
-        <footer>
-            <p>© 2024 ORANGE橙子科技工作室</p>
-        </footer>
+<div class="container">
+  <header>
+    <h1 class="logo-text">ORANGE橙子</h1>
+  </header>
+
+  <main>
+    <div class="up-container">
+
+      <!-- 小奥X-ao -->
+      <div class="up-card">
+        <div class="up-name">小奥X-ao</div>
+        <p>B站UP主</p>
+        <a href="https://space.bilibili.com/3546879352637901" target="_blank" class="up-link">
+          <span class="bilibili-icon">▶</span> 访问主页
+        </a>
+      </div>
+
+      <!-- ✅ 已修改：Wjin1008依叁P -->
+      <div class="up-card">
+        <div class="up-name">Wjin1008依叁P</div> <!-- ← 修改处 -->
+        <p>B站UP主</p>
+        <a href="https://space.bilibili.com/3493138045863993" target="_blank" class="up-link">
+          <span class="bilibili-icon">▶</span> 访问主页
+        </a>
+      </div>
+
+      <!-- ORANGE官方 -->
+      <div class="up-card">
+        <div class="up-name">ORANGE官方</div>
+        <p>B站UP主</p>
+        <a href="https://space.bilibili.com/3706976248793102" target="_blank" class="up-link">
+          <span class="bilibili-icon">▶</span> 访问主页
+        </a>
+      </div>
+
+      <!-- ORANGE小助手 -->
+      <div class="up-card">
+        <div class="up-name">ORANGE小助手</div>
+        <p>B站UP主</p>
+        <a href="https://space.bilibili.com/3706977047808203" target="_blank" class="up-link">
+          <span class="bilibili-icon">▶</span> 访问主页
+        </a>
+      </div>
+
     </div>
+  </main>
+
+  <footer>
+    <p>© 2024 ORANGE橙子科技工作室</p>
+  </footer>
+</div>
 </body>
 </html>
