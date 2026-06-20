@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ORANUP</title>
+    <style>
+        /* 全局设置：白色背景、深色字体 */
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #ffffff; /* 改为纯白色背景 */
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: #333; /* 默认字体颜色改为深灰/黑色 */
+            text-align: center;
+        }
+
+        /* 主容器 */
+        .container {
+            width: 90%;
+            max-width: 600px;
+            padding: 40px 20px;
+        }
+
+        /* 顶部标题图片区域（留空） */
+        .header-image {
+            width: 100%;
+            height: 180px;
+            background-color: #f5f5f7; /* 浅灰色占位背景 */
+            border-radius: 16px;
+            margin-bottom: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #aaa;
+            font-size: 14px;
+            border: 1px dashed #ddd; /* 浅色虚线边框 */
+        }
+
+        /* 按钮网格布局 */
+        .button-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* 两列 */
+            gap: 20px; /* 按钮间距 */
+            margin-bottom: 60px;
+        }
+
+        /* 通用按钮样式 */
+        .btn {
+            padding: 25px 10px;
+            background-color: #f5f5f7; /* 浅灰背景按钮 */
+            border: none;
+            border-radius: 12px;
+            color: #333; /* 深色文字 */
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* 激活按钮的特效（黑白极简风） */
+        .btn.active {
+            background-color: #000000; /* 黑色背景 */
+            color: #ffffff; /* 白色文字 */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn.active:hover {
+            transform: translateY(-5px);
+            background-color: #333; /* 悬浮时变深灰 */
+        }
+
+        /* 未开放按钮的样式 */
+        .btn.disabled {
+            background-color: #f5f5f7;
+            color: #bbb; /* 浅灰色文字 */
+            cursor: not-allowed;
+            border: 1px solid #eee;
+        }
+
+        /* 底部版权信息 */
+        .footer {
+            font-size: 14px;
+            color: #999; /* 浅灰色版权文字 */
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- 1. 顶部图片占位符 -->
+        <div class="header-image">
+            在此处放置标题图片
+        </div>
+
+        <!-- 2. 中间四个按钮 -->
+        <div class="button-grid">
+            <!-- 按钮 1: ORANUP (已激活，跳转链接) -->
+            <a href="https://orange-6lw.pages.dev/" class="btn active" target="_blank">
+                ORANUP
+            </a>
+            
+            <!-- 按钮 2: 暂未开放 -->
+            <button class="btn disabled" onclick="alert('暂未开放')">
+                暂未开放
+            </button>
+            
+            <!-- 按钮 3: 暂未开放 -->
+            <button class="btn disabled" onclick="alert('暂未开放')">
+                暂未开放
+            </button>
+            
+            <!-- 按钮 4: 暂未开放 -->
+            <button class="btn disabled" onclick="alert('暂未开放')">
+                暂未开放
+            </button>
+        </div>
+
+        <!-- 3. 底部版权 -->
+        <div class="footer">
+            © ORANGE 2026 版权所有 Zcloud提供技术支持
+        </div>
+    </div>
+
+</body>
+</html>
