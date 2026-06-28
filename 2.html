@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ORANGE橙子科技 - 作品</title>
     <style>
-        /* 全局设置：通过CSS变量支持主题切换 */
         :root {
             --bg-color: #ffffff;
             --text-color: #333;
@@ -42,14 +41,12 @@
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        /* 主容器 */
         .container {
             width: 90%;
             max-width: 600px;
             padding: 40px 20px;
         }
 
-        /* 新增：顶部标题文字 */
         .page-title {
             font-size: 32px;
             font-weight: bold;
@@ -58,7 +55,6 @@
             letter-spacing: 1px;
         }
 
-        /* 顶部标题图片区域 - 726:289比例 */
         .header-image {
             width: 100%;
             aspect-ratio: 726 / 289;
@@ -80,7 +76,6 @@
             object-position: center;
         }
 
-        /* 黑暗模式切换按钮 */
         .theme-toggle {
             position: absolute;
             top: 12px;
@@ -103,7 +98,6 @@
             transform: scale(1.05);
         }
 
-        /* 按钮网格布局 */
         .button-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -111,7 +105,6 @@
             margin-bottom: 60px;
         }
 
-        /* 通用按钮样式 */
         .btn {
             padding: 25px 10px;
             background-color: var(--btn-bg);
@@ -129,7 +122,6 @@
             position: relative;
         }
 
-        /* 激活按钮的特效 */
         .btn.active {
             background-color: var(--btn-active-bg);
             color: var(--btn-active-text);
@@ -145,7 +137,6 @@
             background-color: #e0e0e0;
         }
 
-        /* 未开放按钮的样式 */
         .btn.disabled {
             background-color: var(--btn-bg);
             color: #bbb;
@@ -153,7 +144,6 @@
             border: 1px solid #eee;
         }
 
-        /* 新增：右上角new标签样式 */
         .new-tag {
             position: absolute;
             top: 8px;
@@ -167,7 +157,6 @@
             letter-spacing: 0.5px;
         }
 
-        /* 底部版权信息 */
         .footer {
             font-size: 14px;
             color: var(--footer-color);
@@ -177,27 +166,24 @@
 </head>
 <body>
     <div class="container">
-        <!-- 新增：顶部标题文字 -->
         <h1 class="page-title">ORANGE的作品</h1>
 
-        <!-- 1. 顶部图片（含切换按钮） -->
         <div class="header-image">
             <img src="ORANGE.png" alt="ORANGE Logo">
-            <!-- 黑暗模式切换按钮 -->
             <button class="theme-toggle" id="themeToggle">🌙</button>
         </div>
 
-        <!-- 2. 中间四个按钮 -->
         <div class="button-grid">
             <!-- 按钮 1: 1（喵喵之歌） -->
             <a href="https://zpl-5oz.pages.dev/1" class="btn active" target="_blank">
                 1（喵喵之歌）
             </a>
             
-            <!-- 按钮 2: 暂未开放 -->
-            <button class="btn disabled" onclick="alert('暂未开放')">
-                暂未开放
-            </button>
+            <!-- 按钮 2: 2（橙子绘画），右上角加 new -->
+            <a href="https://zpl-5oz.pages.dev/2" class="btn active" target="_blank">
+                2（橙子绘画）
+                <span class="new-tag">new</span>
+            </a>
             
             <!-- 按钮 3: 暂未开放 -->
             <button class="btn disabled" onclick="alert('暂未开放')">
@@ -210,7 +196,6 @@
             </button>
         </div>
 
-        <!-- 3. 底部版权 -->
         <div class="footer">
             © ORANGE 2026 版权所有 Zcloud提供技术支持
         </div>
@@ -218,11 +203,8 @@
 
     <script>
         const themeToggle = document.getElementById('themeToggle');
-        
-        // 切换主题
         themeToggle.addEventListener('click', () => {
             document.body.classList.toggle('dark-mode');
-            // 切换按钮图标
             themeToggle.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
         });
     </script>
