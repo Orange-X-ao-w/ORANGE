@@ -5,27 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ORANGE橙子科技</title>
     <style>
-        /* 全局设置：通过CSS变量支持主题切换 */
-        :root {
-            --bg-color: #ffffff;
-            --text-color: #333;
-            --btn-bg: #f5f5f7;
-            --btn-active-bg: #000000;
-            --btn-active-text: #ffffff;
-            --footer-color: #999;
-            --header-border: #ddd;
-        }
-
-        .dark-mode {
-            --bg-color: #121212;
-            --text-color: #e0e0e0;
-            --btn-bg: #2d2d2d;
-            --btn-active-bg: #ffffff;
-            --btn-active-text: #000000;
-            --footer-color: #666;
-            --header-border: #333;
-        }
-
         body {
             margin: 0;
             padding: 0;
@@ -33,21 +12,18 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: var(--bg-color);
+            background-color: #ffffff;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            color: var(--text-color);
+            color: #333;
             text-align: center;
-            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        /* 主容器 */
         .container {
             width: 90%;
             max-width: 600px;
             padding: 40px 20px;
         }
 
-        /* 顶部标题图片区域 - 修改为726:289比例 */
         .header-image {
             width: 100%;
             aspect-ratio: 726 / 289;
@@ -58,8 +34,7 @@
             justify-content: center;
             align-items: center;
             overflow: hidden;
-            border: 1px dashed var(--header-border);
-            position: relative; /* 为切换按钮定位 */
+            border: 1px dashed #ddd;
         }
 
         .header-image img {
@@ -69,30 +44,6 @@
             object-position: center;
         }
 
-        /* 新增：黑暗模式切换按钮 */
-        .theme-toggle {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            width: 36px;
-            height: 36px;
-            border: none;
-            border-radius: 8px;
-            background-color: var(--btn-bg);
-            color: var(--text-color);
-            font-size: 18px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .theme-toggle:hover {
-            transform: scale(1.05);
-        }
-
-        /* 按钮网格布局 */
         .button-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -100,13 +51,12 @@
             margin-bottom: 60px;
         }
 
-        /* 通用按钮样式 */
         .btn {
             padding: 25px 10px;
-            background-color: var(--btn-bg);
+            background-color: #f5f5f7;
             border: none;
             border-radius: 12px;
-            color: var(--text-color);
+            color: #333;
             font-size: 18px;
             font-weight: bold;
             cursor: pointer;
@@ -118,10 +68,9 @@
             position: relative;
         }
 
-        /* 激活按钮的特效 */
         .btn.active {
-            background-color: var(--btn-active-bg);
-            color: var(--btn-active-text);
+            background-color: #000000;
+            color: #ffffff;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
@@ -130,19 +79,13 @@
             background-color: #333;
         }
 
-        .dark-mode .btn.active:hover {
-            background-color: #e0e0e0;
-        }
-
-        /* 未开放按钮的样式 */
         .btn.disabled {
-            background-color: var(--btn-bg);
+            background-color: #f5f5f7;
             color: #bbb;
             cursor: not-allowed;
             border: 1px solid #eee;
         }
 
-        /* 新增：右上角new标签样式 */
         .new-tag {
             position: absolute;
             top: 8px;
@@ -156,58 +99,45 @@
             letter-spacing: 0.5px;
         }
 
-        /* 底部版权信息 */
         .footer {
             font-size: 14px;
-            color: var(--footer-color);
+            color: #999;
             letter-spacing: 1px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- 1. 顶部图片（含切换按钮） -->
         <div class="header-image">
             <img src="ORANGE.png" alt="ORANGE Logo">
-            <!-- 黑暗模式切换按钮 -->
-            <button class="theme-toggle" id="themeToggle">🌙</button>
         </div>
 
-        <!-- 2. 中间四个按钮（完全不变） -->
         <div class="button-grid">
+            <!-- 按钮 1: ORANUP -->
             <a href="https://orange-6lw.pages.dev/1" class="btn active" target="_blank">
                 ORANUP
             </a>
             
-            <a href="https://orange-6lw.pages.dev/2" class="btn active" target="_blank">
+            <!-- 按钮 2: 作品（去掉 new） -->
+            <a href="https://orange-6lw.pages.dev/1" class="btn active" target="_blank">
                 作品
+            </a>
+            
+            <!-- 按钮 3: 刷新（加上 new） -->
+            <a href="https://orange-6lw.pages.dev/" class="btn active" target="_blank">
+                刷新
                 <span class="new-tag">new</span>
             </a>
             
-            <button class="btn disabled" onclick="alert('暂未开放')">
-                暂未开放
-            </button>
-            
+            <!-- 按钮 4: 暂未开放 -->
             <button class="btn disabled" onclick="alert('暂未开放')">
                 暂未开放
             </button>
         </div>
 
-        <!-- 3. 底部版权（完全不变） -->
         <div class="footer">
             © ORANGE 2026 版权所有 Zcloud提供技术支持
         </div>
     </div>
-
-    <script>
-        const themeToggle = document.getElementById('themeToggle');
-        
-        // 切换主题
-        themeToggle.addEventListener('click', () => {
-            document.body.classList.toggle('dark-mode');
-            // 切换按钮图标
-            themeToggle.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
-        });
-    </script>
 </body>
 </html>
