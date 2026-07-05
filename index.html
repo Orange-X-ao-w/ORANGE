@@ -45,6 +45,39 @@
             object-position: center;
         }
 
+        /* 用户信息区（登录后显示） */
+        .user-info {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .user-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background-color: #000000;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .user-name {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .user-uuid {
+            font-size: 12px;
+            color: #999;
+            margin-top: 4px;
+        }
+
         /* 按钮网格 */
         .button-grid {
             display: grid;
@@ -112,6 +145,26 @@
             margin-top: 8px;
         }
 
+        /* 退出登录按钮 */
+        .logout-btn {
+            display: none;
+            margin-top: 20px;
+            padding: 12px 30px;
+            background-color: #f5f5f7;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            color: #666;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .logout-btn:hover {
+            background-color: #eee;
+        }
+
         /* 底部版权 */
         .footer {
             font-size: 14px;
@@ -128,6 +181,15 @@
     <!-- 顶部 LOGO -->
     <div class="header-image">
         <img src="ORANGE.png" alt="ORANGE Logo">
+    </div>
+
+    <!-- 用户信息（登录后显示） -->
+    <div class="user-info" id="userInfo">
+        <div class="user-avatar" id="userAvatar">U</div>
+        <div>
+            <div class="user-name" id="userName">用户名</div>
+            <div class="user-uuid" id="userUuid">UUID</div>
+        </div>
     </div>
 
     <!-- 主按钮区 -->
@@ -150,13 +212,16 @@
         </button>
     </div>
 
-    <!-- 登录按钮 -->
-    <div class="login-section">
+    <!-- 登录按钮（未登录时显示） -->
+    <div class="login-section" id="loginSection">
         <a href="http://free.frpee.top:19148/" class="btn active" target="_blank">
             登录
         </a>
         <div class="login-note">此站点不一定开放</div>
     </div>
+
+    <!-- 退出登录（登录后显示） -->
+    <a href="#" class="logout-btn" id="logoutBtn">退出登录</a>
 
     <!-- 底部版权 -->
     <div class="footer">
@@ -165,5 +230,114 @@
 
 </div>
 
+<script>
+    // ========== 配置 ==========
+    const AUTH_API_BASE = 'http://free.frpee.top:19148';
+
+    // ========== 工具函数 ==========
+    function getQueryParam(name) {
+        const params = new URLSearchParams(window.location.search);
+        return params.get(name);
+    }
+
+    function removeQueryParam(name) {
+        const url = new URL(window.location);
+        url.searchParams.delete(name);
+        window.history.replaceState({}, '', url);
+    }
+
+    // ========== 获取用户信息 ==========
+    async function fetchUserInfo(uuid) {
+        try {
+            // 先尝试从 localStorage 获取 token
+            const token = localStorage.getItem('orange_token_' + uuid);
+
+            if (token) {
+                // 用 token 获取用户信息
+                const res = await fetch(`${AUTH_API_BASE}/api/userinfo?token=${encodeURIComponent(token)}`);
+                const data = await res.json();
+                if (data.success && data.user) {
+                    return data.user;
+                }
+            }
+
+            // 如果没有 token 或 token 失效，返回基础信息
+            return {
+                username: '用户' + uuid.substring(0, 6),
+                uuid: uuid,
+                email: null,
+                phone: null
+            };
+        } catch (err) {
+            console.error('获取用户信息失败:', err);
+            // 网络错误时也显示基础信息
+            return {
+                username: '用户' + uuid.substring(0, 6),
+                uuid: uuid,
+                email: null,
+                phone: null
+            };
+        }
+    }
+
+    // ========== 渲染个人主页 ==========
+    function renderUserProfile(user) {
+        // 隐藏登录按钮
+        document.getElementById('loginSection').style.display = 'none';
+        // 显示退出按钮
+        document.getElementById('logoutBtn').style.display = 'inline-block';
+        // 显示用户信息
+        document.getElementById('userInfo').style.display = 'flex';
+
+        // 设置用户名
+        document.getElementById('userName').textContent = user.username || '未知用户';
+        // 设置 UUID 显示
+        document.getElementById('userUuid').textContent = user.uuid || '';
+        // 设置头像文字（取用户名首字母）
+        const avatarText = user.username ? user.username.charAt(0).toUpperCase() : 'U';
+        document.getElementById('userAvatar').textContent = avatarText;
+    }
+
+    // ========== 退出登录 ==========
+    document.getElementById('logoutBtn').addEventListener('click', async function(e) {
+        e.preventDefault();
+
+        const uuid = getQueryParam('uuid');
+        const token = localStorage.getItem('orange_token_' + uuid);
+
+        if (token) {
+            try {
+                // 调用退出登录接口
+                await fetch(`${AUTH_API_BASE}/api/logout`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token: token })
+                });
+            } catch (err) {
+                console.error('退出登录请求失败:', err);
+            }
+            // 清除本地 token
+            localStorage.removeItem('orange_token_' + uuid);
+        }
+
+        // 清除 URL 中的 uuid 并刷新
+        removeQueryParam('uuid');
+        location.reload();
+    });
+
+    // ========== 主逻辑 ==========
+    (async function main() {
+        const uuid = getQueryParam('uuid');
+
+        if (uuid) {
+            // 有 UUID → 获取用户信息并渲染个人主页
+            const user = await fetchUserInfo(uuid);
+            renderUserProfile(user);
+        }
+        // 无 UUID → 保持默认登录按钮状态，不做任何事
+    })();
+</script>
+
 </body>
+</html>
 </html>
