@@ -28,14 +28,11 @@
         .header-image {
             width: 100%;
             aspect-ratio: 726 / 289;
-            background-color: #f5f5f7;
-            border-radius: 16px;
             margin-bottom: 50px;
             display: flex;
             justify-content: center;
             align-items: center;
             overflow: hidden;
-            border: 1px dashed #ddd;
         }
 
         .header-image img {
@@ -198,18 +195,18 @@
             ORANUP
         </a>
 
-        <a href="https://orange-6lw.pages.dev/1" class="btn active" target="_blank">
+        <a href="https://orange-6lw.pages.dev/2" class="btn active" target="_blank">
             作品
         </a>
 
         <a href="https://orange-6lw.pages.dev/" class="btn active" target="_blank">
             刷新
-            <span class="new-tag">new</span>
         </a>
 
-        <button class="btn disabled" onclick="alert('暂未开放')">
-            暂未开放
-        </button>
+        <a href="https://ordream.pages.dev/" class="btn active" target="_blank">
+            ORdream
+            <span class="new-tag">new</span>
+        </a>
     </div>
 
     <!-- 登录按钮（未登录时显示） -->
@@ -225,7 +222,7 @@
 
     <!-- 底部版权 -->
     <div class="footer">
-        © ORANGE 2026 版权所有 Zcloud提供技术支持
+        © ORDM(ORANGE) 2026 版权所有 Zcloud提供技术支持
     </div>
 
 </div>
@@ -249,11 +246,9 @@
     // ========== 获取用户信息 ==========
     async function fetchUserInfo(uuid) {
         try {
-            // 先尝试从 localStorage 获取 token
             const token = localStorage.getItem('orange_token_' + uuid);
 
             if (token) {
-                // 用 token 获取用户信息
                 const res = await fetch(`${AUTH_API_BASE}/api/userinfo?token=${encodeURIComponent(token)}`);
                 const data = await res.json();
                 if (data.success && data.user) {
@@ -261,7 +256,6 @@
                 }
             }
 
-            // 如果没有 token 或 token 失效，返回基础信息
             return {
                 username: '用户' + uuid.substring(0, 6),
                 uuid: uuid,
@@ -270,7 +264,6 @@
             };
         } catch (err) {
             console.error('获取用户信息失败:', err);
-            // 网络错误时也显示基础信息
             return {
                 username: '用户' + uuid.substring(0, 6),
                 uuid: uuid,
@@ -282,18 +275,12 @@
 
     // ========== 渲染个人主页 ==========
     function renderUserProfile(user) {
-        // 隐藏登录按钮
         document.getElementById('loginSection').style.display = 'none';
-        // 显示退出按钮
         document.getElementById('logoutBtn').style.display = 'inline-block';
-        // 显示用户信息
         document.getElementById('userInfo').style.display = 'flex';
 
-        // 设置用户名
         document.getElementById('userName').textContent = user.username || '未知用户';
-        // 设置 UUID 显示
         document.getElementById('userUuid').textContent = user.uuid || '';
-        // 设置头像文字（取用户名首字母）
         const avatarText = user.username ? user.username.charAt(0).toUpperCase() : 'U';
         document.getElementById('userAvatar').textContent = avatarText;
     }
@@ -307,7 +294,6 @@
 
         if (token) {
             try {
-                // 调用退出登录接口
                 await fetch(`${AUTH_API_BASE}/api/logout`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -316,11 +302,9 @@
             } catch (err) {
                 console.error('退出登录请求失败:', err);
             }
-            // 清除本地 token
             localStorage.removeItem('orange_token_' + uuid);
         }
 
-        // 清除 URL 中的 uuid 并刷新
         removeQueryParam('uuid');
         location.reload();
     });
@@ -330,14 +314,11 @@
         const uuid = getQueryParam('uuid');
 
         if (uuid) {
-            // 有 UUID → 获取用户信息并渲染个人主页
             const user = await fetchUserInfo(uuid);
             renderUserProfile(user);
         }
-        // 无 UUID → 保持默认登录按钮状态，不做任何事
     })();
 </script>
 
 </body>
-</html>
 </html>
