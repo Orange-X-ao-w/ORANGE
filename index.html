@@ -170,6 +170,39 @@
             letter-spacing: 1px;
             margin-top: 40px;
         }
+
+        /* 底部徽章行：萌ICP + 异次元之旅 */
+        .badges {
+            margin-top: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 14px;
+        }
+
+        .badges > svg {
+            display: block;
+            margin-top: 0;
+        }
+
+        .travel-badge {
+            display: inline-flex;
+            align-items: center;
+            line-height: 0;
+        }
+
+        .travel-badge img {
+            display: block;
+            width: auto;
+            height: 36px;
+            border-radius: 3px;
+            transition: opacity 0.3s ease;
+        }
+
+        .travel-badge:hover img {
+            opacity: 0.8;
+        }
     </style>
 </head>
 <body>
@@ -223,25 +256,32 @@
 
     <!-- 底部版权 -->
     <div class="footer">
-        © ORDM(ORANGE) 2026 版权所有 Zcloud提供技术支持<br>
-        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="158.5" height="25" role="img" aria-label="萌ICP备: 20262014号" style="margin-top:8px;">
-            <a xlink:href="https://icp.gov.moe/?keyword=20262014" target="_blank">
-            <title>萌ICP备: 20262014号</title>
-        <defs>
-            <clipPath id="rounded-corner">
-                <rect width="158.5" height="25" rx="3" ry="3"/>
-            </clipPath>
-        </defs>
-        <g shape-rendering="crispEdges" clip-path="url(#rounded-corner)">
-            <rect width="65.5" height="25" fill="#92400e"/>
-            <rect x="65.5" width="93" height="25" fill="#f59e0b"/>
-        </g>
-        <g fill="#fff" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" text-rendering="geometricPrecision" font-size="130">
-            <text x="327.5" y="170" transform="scale(.1)" fill="#fff" textLength="505">萌ICP备</text>
-            <text x="1120" y="170" transform="scale(.1)" fill="#fff" textLength="805">20262014号</text>
-        </g>
+        © ORDM(ORANGE) 2026 版权所有 Zcloud提供技术支持
+
+        <div class="badges">
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="158.5" height="25" role="img" aria-label="萌ICP备: 20262014号">
+                <a xlink:href="https://icp.gov.moe/?keyword=20262014" target="_blank">
+                <title>萌ICP备: 20262014号</title>
+            <defs>
+                <clipPath id="rounded-corner">
+                    <rect width="158.5" height="25" rx="3" ry="3"/>
+                </clipPath>
+            </defs>
+            <g shape-rendering="crispEdges" clip-path="url(#rounded-corner)">
+                <rect width="65.5" height="25" fill="#92400e"/>
+                <rect x="65.5" width="93" height="25" fill="#f59e0b"/>
+            </g>
+            <g fill="#fff" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" text-rendering="geometricPrecision" font-size="130">
+                <text x="327.5" y="170" transform="scale(.1)" fill="#fff" textLength="505">萌ICP备</text>
+                <text x="1120" y="170" transform="scale(.1)" fill="#fff" textLength="805">20262014号</text>
+            </g>
+                </a>
+            </svg>
+
+            <a href="https://travel.moe/go.html" target="_blank" class="travel-badge">
+                <img src="https://travel.moe/images/logo/gif-kt/startup-default.gif" style="width:auto;height:36px" title="异次元之旅-跃迁-我们一起去萌站成员的星球旅行吧！" alt="异次元之旅">
             </a>
-        </svg>
+        </div>
     </div>
 
 </div>
