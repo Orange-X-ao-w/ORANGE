@@ -221,6 +221,116 @@
         .travel-badge:hover img {
             opacity: 0.8;
         }
+
+        /* ===== 右下角背景音乐按钮（新增） ===== */
+        .music-btn {
+            position: fixed;
+            right: 24px;
+            bottom: 24px;
+            z-index: 9999;
+            width: 52px;
+            height: 52px;
+            display: grid;
+            place-items: center;
+            padding: 0;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 50%;
+            cursor: pointer;
+            color: #333333;
+            background-color: #f5f5f7;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+            transition: transform 0.18s ease, background-color 0.25s ease, color 0.25s ease;
+        }
+
+        .music-btn:hover {
+            transform: scale(1.07);
+            background-color: #ececed;
+        }
+
+        .music-btn:active {
+            transform: scale(0.95);
+        }
+
+        .music-btn svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* 播放中：反色 + 唱片旋转 */
+        .music-btn.playing {
+            background-color: #000000;
+            color: #ffffff;
+            border-color: #000000;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+        }
+
+        .music-btn.playing .disc {
+            animation: music-spin 3.2s linear infinite;
+        }
+
+        @keyframes music-spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* 暂停时显示斜杠，播放时隐藏 */
+        .music-btn .slash { display: block; }
+        .music-btn.playing .slash { display: none; }
+
+        /* 播放时的扩散声波圈 */
+        .music-btn .waves {
+            display: none;
+            position: absolute;
+            inset: -6px;
+            border-radius: 50%;
+            border: 1px solid rgba(0, 0, 0, 0.35);
+        }
+
+        .music-btn.playing .waves {
+            display: block;
+            animation: music-ripple 2s ease-out infinite;
+        }
+
+        .music-btn.playing .waves:nth-of-type(2) {
+            animation-delay: 0.7s;
+        }
+
+        @keyframes music-ripple {
+            0%   { transform: scale(1);   opacity: 0.6; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+
+        /* 提示气泡 */
+        .music-tip {
+            position: fixed;
+            right: 88px;
+            bottom: 38px;
+            z-index: 9999;
+            padding: 8px 14px;
+            border-radius: 999px;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            background-color: rgba(255, 255, 255, 0.94);
+            color: #666;
+            font-size: 12.5px;
+            white-space: nowrap;
+            opacity: 0;
+            transform: translateX(8px);
+            pointer-events: none;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+        }
+
+        .music-tip.show {
+            opacity: 1;
+            transform: none;
+        }
+
+        @media (max-width: 420px) {
+            .music-tip {
+                right: auto;
+                left: 20px;
+                bottom: 88px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -307,6 +417,109 @@
     </div>
 
 </div>
+
+<!-- ===== 背景音乐（新增）：mp3 与本文件放在同一目录 ===== -->
+<audio id="bgm" src="月が綺麗ねと言われたい！-柿崎ユウ_.mp3" loop preload="auto"></audio>
+
+<button class="music-btn" id="musicBtn" type="button" aria-label="播放/暂停背景音乐" title="播放/暂停背景音乐">
+    <span class="waves"></span>
+    <span class="waves"></span>
+    <svg class="disc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M9 18V6l10-3v12"/>
+        <circle cx="6.5" cy="18" r="2.6"/>
+        <circle cx="16.5" cy="15" r="2.6"/>
+        <line class="slash" x1="3" y1="3" x2="21" y2="21"/>
+    </svg>
+</button>
+<div class="music-tip" id="musicTip">点击页面任意处即可播放音乐 ♪</div>
+
+<script>
+    (function () {
+        var audio    = document.getElementById('bgm');
+        var btn      = document.getElementById('musicBtn');
+        var tip      = document.getElementById('musicTip');
+        var started  = false;
+        var tipTimer = null;
+
+        function syncUI() {
+            btn.classList.toggle('playing', !audio.paused && !audio.ended);
+        }
+
+        function showTip(text, autoHide) {
+            tip.textContent = text;
+            tip.classList.add('show');
+            clearTimeout(tipTimer);
+            if (autoHide !== false) {
+                tipTimer = setTimeout(function () { tip.classList.remove('show'); }, 3200);
+            }
+        }
+
+        function removeOnce() {
+            document.removeEventListener('click', onFirstInteract);
+            document.removeEventListener('touchstart', onFirstInteract);
+            document.removeEventListener('keydown', onFirstInteract);
+        }
+
+        function tryPlay() {
+            audio.volume = 0.6;
+            var p = audio.play();
+            if (p && typeof p.catch === 'function') {
+                p.then(function () {
+                    started = true;
+                    syncUI();
+                    tip.classList.remove('show');
+                    removeOnce();
+                }).catch(function () {
+                    showTip('点击页面任意处即可播放音乐 ♪');
+                });
+            } else {
+                started = true;
+                syncUI();
+                removeOnce();
+            }
+        }
+
+        function onFirstInteract() {
+            if (!started) { tryPlay(); }
+        }
+
+        document.addEventListener('click', onFirstInteract);
+        document.addEventListener('touchstart', onFirstInteract);
+        document.addEventListener('keydown', onFirstInteract);
+
+        btn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            if (audio.paused) {
+                audio.volume = 0.6;
+                audio.play().then(function () {
+                    started = true;
+                    syncUI();
+                    removeOnce();
+                    tip.classList.remove('show');
+                }).catch(function () {
+                    showTip('音乐文件未找到，请确认 mp3 与网页在同一目录');
+                });
+            } else {
+                audio.pause();
+                syncUI();
+                showTip('已暂停 ♪');
+            }
+        });
+
+        btn.addEventListener('mouseenter', function () {
+            if (!started) { showTip('点击开启背景音乐 ♪'); }
+        });
+
+        audio.addEventListener('error', function () {
+            showTip('未找到音乐文件：请确认 mp3 与本网页在同一目录');
+        });
+
+        audio.addEventListener('play', syncUI);
+        audio.addEventListener('pause', syncUI);
+
+        window.addEventListener('load', tryPlay);
+    })();
+</script>
 
 <script>
     // ========== 配置 ==========
