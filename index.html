@@ -277,8 +277,8 @@
         © ORDM(ORANGE) 2026 版权所有 Zcloud提供技术支持
 
         <div class="badges">
-            <a href="#" class="site-icon">
-                <img src="icon400.png" alt="站点图标" title="ORANGE橙子科技">
+            <a href="https://icp.gov.moe/aboutus.php" class="site-icon" target="_blank" rel="noopener noreferrer">
+                <img src="icon400.png" alt="萌国ICP备案" title="萌国ICP备案 · 关于我们">
             </a>
 
             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="158.5" height="25" role="img" aria-label="萌ICP备: 20262014号">
@@ -337,12 +337,13 @@
                 }
             }
 
-            return {
+            const fallback = {
                 username: '用户' + uuid.substring(0, 6),
                 uuid: uuid,
                 email: null,
                 phone: null
             };
+            return fallback;
         } catch (err) {
             console.error('获取用户信息失败:', err);
             return {
