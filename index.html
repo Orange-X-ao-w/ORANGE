@@ -171,7 +171,7 @@
             margin-top: 40px;
         }
 
-        /* 底部徽章行：萌ICP + 异次元之旅 */
+        /* 底部徽章行：站点图标 + 萌ICP + 异次元之旅 */
         .badges {
             margin-top: 12px;
             display: flex;
@@ -184,6 +184,24 @@
         .badges > svg {
             display: block;
             margin-top: 0;
+        }
+
+        .site-icon {
+            display: inline-flex;
+            align-items: center;
+            line-height: 0;
+        }
+
+        .site-icon img {
+            display: block;
+            width: auto;
+            height: 36px;
+            border-radius: 3px;
+            transition: opacity 0.3s ease;
+        }
+
+        .site-icon:hover img {
+            opacity: 0.8;
         }
 
         .travel-badge {
@@ -259,6 +277,10 @@
         © ORDM(ORANGE) 2026 版权所有 Zcloud提供技术支持
 
         <div class="badges">
+            <a href="#" class="site-icon">
+                <img src="icon400.png" alt="站点图标" title="ORANGE橙子科技">
+            </a>
+
             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="158.5" height="25" role="img" aria-label="萌ICP备: 20262014号">
                 <a xlink:href="https://icp.gov.moe/?keyword=20262014" target="_blank">
                 <title>萌ICP备: 20262014号</title>
