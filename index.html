@@ -63,6 +63,16 @@
             justify-content: center;
             font-size: 20px;
             font-weight: bold;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            background-color: #f5f5f7;
         }
 
         .user-name {
@@ -74,6 +84,16 @@
             font-size: 12px;
             color: #999;
             margin-top: 4px;
+        }
+
+        .user-meta {
+            font-size: 12px;
+            color: #999;
+            margin-top: 4px;
+        }
+
+        .user-meta .verified {
+            color: #16a34a;
         }
 
         /* 按钮网格 */
@@ -141,7 +161,11 @@
             font-size: 12px;
             color: #999;
             margin-top: 8px;
+            min-height: 18px;
         }
+
+        .login-note.error { color: #e11d48; }
+        .login-note.ok { color: #16a34a; }
 
         /* 退出登录按钮 */
         .logout-btn {
@@ -171,7 +195,6 @@
             margin-top: 40px;
         }
 
-        /* 底部徽章行：站点图标 + 萌ICP + 异次元之旅 */
         .badges {
             margin-top: 12px;
             display: flex;
@@ -181,18 +204,15 @@
             gap: 14px;
         }
 
-        .badges > svg {
-            display: block;
-            margin-top: 0;
-        }
+        .badges > svg { display: block; margin-top: 0; }
 
-        .site-icon {
+        .site-icon, .travel-badge {
             display: inline-flex;
             align-items: center;
             line-height: 0;
         }
 
-        .site-icon img {
+        .site-icon img, .travel-badge img {
             display: block;
             width: auto;
             height: 36px;
@@ -200,29 +220,9 @@
             transition: opacity 0.3s ease;
         }
 
-        .site-icon:hover img {
-            opacity: 0.8;
-        }
+        .site-icon:hover img, .travel-badge:hover img { opacity: 0.8; }
 
-        .travel-badge {
-            display: inline-flex;
-            align-items: center;
-            line-height: 0;
-        }
-
-        .travel-badge img {
-            display: block;
-            width: auto;
-            height: 36px;
-            border-radius: 3px;
-            transition: opacity 0.3s ease;
-        }
-
-        .travel-badge:hover img {
-            opacity: 0.8;
-        }
-
-        /* ===== 右下角背景音乐按钮（新增） ===== */
+        /* ===== 右下角背景音乐按钮 ===== */
         .music-btn {
             position: fixed;
             right: 24px;
@@ -242,21 +242,10 @@
             transition: transform 0.18s ease, background-color 0.25s ease, color 0.25s ease;
         }
 
-        .music-btn:hover {
-            transform: scale(1.07);
-            background-color: #ececed;
-        }
+        .music-btn:hover { transform: scale(1.07); background-color: #ececed; }
+        .music-btn:active { transform: scale(0.95); }
+        .music-btn svg { width: 24px; height: 24px; }
 
-        .music-btn:active {
-            transform: scale(0.95);
-        }
-
-        .music-btn svg {
-            width: 24px;
-            height: 24px;
-        }
-
-        /* 播放中：反色 + 唱片旋转 */
         .music-btn.playing {
             background-color: #000000;
             color: #ffffff;
@@ -264,19 +253,13 @@
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
         }
 
-        .music-btn.playing .disc {
-            animation: music-spin 3.2s linear infinite;
-        }
+        .music-btn.playing .disc { animation: music-spin 3.2s linear infinite; }
 
-        @keyframes music-spin {
-            to { transform: rotate(360deg); }
-        }
+        @keyframes music-spin { to { transform: rotate(360deg); } }
 
-        /* 暂停时显示斜杠，播放时隐藏 */
         .music-btn .slash { display: block; }
         .music-btn.playing .slash { display: none; }
 
-        /* 播放时的扩散声波圈 */
         .music-btn .waves {
             display: none;
             position: absolute;
@@ -285,21 +268,14 @@
             border: 1px solid rgba(0, 0, 0, 0.35);
         }
 
-        .music-btn.playing .waves {
-            display: block;
-            animation: music-ripple 2s ease-out infinite;
-        }
-
-        .music-btn.playing .waves:nth-of-type(2) {
-            animation-delay: 0.7s;
-        }
+        .music-btn.playing .waves { display: block; animation: music-ripple 2s ease-out infinite; }
+        .music-btn.playing .waves:nth-of-type(2) { animation-delay: 0.7s; }
 
         @keyframes music-ripple {
             0%   { transform: scale(1);   opacity: 0.6; }
             100% { transform: scale(1.5); opacity: 0; }
         }
 
-        /* 提示气泡 */
         .music-tip {
             position: fixed;
             right: 88px;
@@ -319,17 +295,10 @@
             box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
         }
 
-        .music-tip.show {
-            opacity: 1;
-            transform: none;
-        }
+        .music-tip.show { opacity: 1; transform: none; }
 
         @media (max-width: 420px) {
-            .music-tip {
-                right: auto;
-                left: 20px;
-                bottom: 88px;
-            }
+            .music-tip { right: auto; left: 20px; bottom: 88px; }
         }
     </style>
 </head>
@@ -348,39 +317,33 @@
         <div>
             <div class="user-name" id="userName">用户名</div>
             <div class="user-uuid" id="userUuid">UUID</div>
+            <div class="user-meta" id="userMeta"></div>
         </div>
     </div>
 
     <!-- 主按钮区 -->
     <div class="button-grid">
-        <a href="https://orange-6lw.pages.dev/1" class="btn active" target="_blank">
-            ORANUP
-        </a>
-
-        <a href="https://orange-6lw.pages.dev/2" class="btn active" target="_blank">
-            作品
-        </a>
-
-        <a href="https://orange-6lw.pages.dev/" class="btn active" target="_blank">
-            刷新
-        </a>
-
+        <a href="https://orange-6lw.pages.dev/1" class="btn active" target="_blank">ORANUP</a>
+        <a href="https://orange-6lw.pages.dev/2" class="btn active" target="_blank">作品</a>
+        <a href="https://orange-6lw.pages.dev/" class="btn active" target="_blank">刷新</a>
         <a href="https://ordream.pages.dev/" class="btn active" target="_blank">
             ORDM术力口
             <span class="new-tag">有更新</span>
         </a>
+
+        <!-- 预留按钮：待接入自有 API，接入后把 class 换成 btn active 并补 data-api -->
+        <button type="button" class="btn disabled" data-api="" title="预留位：接入后自动启用">预留 · 我的</button>
+        <button type="button" class="btn disabled" data-api="" title="预留位：接入后自动启用">预留 · 消息</button>
     </div>
 
     <!-- 登录按钮（未登录时显示） -->
     <div class="login-section" id="loginSection">
-        <a href="https://orange-x-ao-w.github.io/zpl/ORANGETYSFRZ" class="btn active" target="_blank">
-            登录
-        </a>
-        <div class="login-note">此站点现已关闭，跳转后为空页</div>
+        <a href="#" class="btn active" id="loginBtn" style="max-width:260px;margin:0 auto;">登录</a>
+        <div class="login-note" id="authStatus"></div>
     </div>
 
     <!-- 退出登录（登录后显示） -->
-    <a href="#" class="logout-btn" id="logoutBtn">预留（原退登）</a>
+    <a href="#" class="logout-btn" id="logoutBtn">退出登录</a>
 
     <!-- 底部版权 -->
     <div class="footer">
@@ -394,19 +357,19 @@
             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="158.5" height="25" role="img" aria-label="萌ICP备: 20262014号">
                 <a xlink:href="https://icp.gov.moe/?keyword=20262014" target="_blank">
                 <title>萌ICP备: 20262014号</title>
-            <defs>
-                <clipPath id="rounded-corner">
-                    <rect width="158.5" height="25" rx="3" ry="3"/>
-                </clipPath>
-            </defs>
-            <g shape-rendering="crispEdges" clip-path="url(#rounded-corner)">
-                <rect width="65.5" height="25" fill="#92400e"/>
-                <rect x="65.5" width="93" height="25" fill="#f59e0b"/>
-            </g>
-            <g fill="#fff" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" text-rendering="geometricPrecision" font-size="130">
-                <text x="327.5" y="170" transform="scale(.1)" fill="#fff" textLength="505">萌ICP备</text>
-                <text x="1120" y="170" transform="scale(.1)" fill="#fff" textLength="805">20262014号</text>
-            </g>
+                <defs>
+                    <clipPath id="rounded-corner">
+                        <rect width="158.5" height="25" rx="3" ry="3"/>
+                    </clipPath>
+                </defs>
+                <g shape-rendering="crispEdges" clip-path="url(#rounded-corner)">
+                    <rect width="65.5" height="25" fill="#92400e"/>
+                    <rect x="65.5" width="93" height="25" fill="#f59e0b"/>
+                </g>
+                <g fill="#fff" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" text-rendering="geometricPrecision" font-size="130">
+                    <text x="327.5" y="170" transform="scale(.1)" fill="#fff" textLength="505">萌ICP备</text>
+                    <text x="1120" y="170" transform="scale(.1)" fill="#fff" textLength="805">20262014号</text>
+                </g>
                 </a>
             </svg>
 
@@ -418,7 +381,7 @@
 
 </div>
 
-<!-- ===== 背景音乐（新增）：mp3 与本文件放在同一目录 ===== -->
+<!-- ===== 背景音乐：mp3 与本文件放在同一目录 ===== -->
 <audio id="bgm" src="月が綺麗ねと言われたい！-柿崎ユウ_.mp3" loop preload="auto"></audio>
 
 <button class="music-btn" id="musicBtn" type="button" aria-label="播放/暂停背景音乐" title="播放/暂停背景音乐">
@@ -433,6 +396,7 @@
 </button>
 <div class="music-tip" id="musicTip">点击页面任意处即可播放音乐 ♪</div>
 
+<!-- ====== 背景音乐逻辑 ====== -->
 <script>
     (function () {
         var audio    = document.getElementById('bgm');
@@ -465,23 +429,16 @@
             var p = audio.play();
             if (p && typeof p.catch === 'function') {
                 p.then(function () {
-                    started = true;
-                    syncUI();
-                    tip.classList.remove('show');
-                    removeOnce();
+                    started = true; syncUI(); tip.classList.remove('show'); removeOnce();
                 }).catch(function () {
                     showTip('点击页面任意处即可播放音乐 ♪');
                 });
             } else {
-                started = true;
-                syncUI();
-                removeOnce();
+                started = true; syncUI(); removeOnce();
             }
         }
 
-        function onFirstInteract() {
-            if (!started) { tryPlay(); }
-        }
+        function onFirstInteract() { if (!started) { tryPlay(); } }
 
         document.addEventListener('click', onFirstInteract);
         document.addEventListener('touchstart', onFirstInteract);
@@ -492,17 +449,12 @@
             if (audio.paused) {
                 audio.volume = 0.6;
                 audio.play().then(function () {
-                    started = true;
-                    syncUI();
-                    removeOnce();
-                    tip.classList.remove('show');
+                    started = true; syncUI(); removeOnce(); tip.classList.remove('show');
                 }).catch(function () {
                     showTip('音乐文件未找到，请确认 mp3 与网页在同一目录');
                 });
             } else {
-                audio.pause();
-                syncUI();
-                showTip('已暂停 ♪');
+                audio.pause(); syncUI(); showTip('已暂停 ♪');
             }
         });
 
@@ -521,98 +473,221 @@
     })();
 </script>
 
+<!-- ====== OAuth 2.0 登录逻辑 ====== -->
 <script>
-    // ========== 配置 ==========
-    const AUTH_API_BASE = 'http://free.frpee.top:19148';
+(function () {
+    'use strict';
 
-    // ========== 工具函数 ==========
-    function getQueryParam(name) {
-        const params = new URLSearchParams(window.location.search);
-        return params.get(name);
+    /* ================= 配置 ================= */
+    var CONFIG = {
+        CLIENT_ID:     'client_7AY4pmpO',
+        CLIENT_SECRET: 'secret_JAooMGM9yZnlokypoPf0U1Cj',
+        AUTHORIZE_URL: 'https://auth.7e.ink/oauth/authorize',
+        TOKEN_URL:     'https://api-auth.7e.ink/oauth/token',
+        USERINFO_URL:  'https://api-auth.7e.ink/oauth/userinfo',
+        SCOPE:         'profile',
+        // 回调地址：默认用当前页面地址（需与认证后台登记的白名单一致）
+        // 若后台登记的是 https://orange-6lw.pages.dev/ ，请把下面这行改成固定值
+        REDIRECT_URI:  location.origin + location.pathname
+    };
+
+    var LS_TOKEN = 'orange_access_token';
+    var LS_USER  = 'orange_user';
+
+    /* ================= 工具 ================= */
+    var $ = function (id) { return document.getElementById(id); };
+
+    function status(msg, type) {
+        var el = $('authStatus');
+        el.textContent = msg || '';
+        el.className = 'login-note' + (type ? ' ' + type : '');
     }
 
-    function removeQueryParam(name) {
-        const url = new URL(window.location);
-        url.searchParams.delete(name);
-        window.history.replaceState({}, '', url);
+    function randomStr(n) {
+        var arr = new Uint8Array(n);
+        (window.crypto || window.msCrypto).getRandomValues(arr);
+        return Array.prototype.map.call(arr, function (b) {
+            return ('0' + b.toString(16)).slice(-2);
+        }).join('');
     }
 
-    // ========== 获取用户信息 ==========
-    async function fetchUserInfo(uuid) {
-        try {
-            const token = localStorage.getItem('orange_token_' + uuid);
+    function getToken() { return localStorage.getItem(LS_TOKEN); }
+    function setToken(t) { localStorage.setItem(LS_TOKEN, t); }
+    function clearToken() { localStorage.removeItem(LS_TOKEN); localStorage.removeItem(LS_USER); }
 
-            if (token) {
-                const res = await fetch(`${AUTH_API_BASE}/api/userinfo?token=${encodeURIComponent(token)}`);
-                const data = await res.json();
-                if (data.success && data.user) {
-                    return data.user;
-                }
-            }
+    /* ================= 1. 发起登录 ================= */
+    function startLogin() {
+        var state = randomStr(16);
+        sessionStorage.setItem('oauth_state', state);
 
-            const fallback = {
-                username: '用户' + uuid.substring(0, 6),
-                uuid: uuid,
-                email: null,
-                phone: null
+        var url = CONFIG.AUTHORIZE_URL +
+            '?client_id='     + encodeURIComponent(CONFIG.CLIENT_ID) +
+            '&redirect_uri='  + encodeURIComponent(CONFIG.REDIRECT_URI) +
+            '&response_type=code' +
+            '&scope='         + encodeURIComponent(CONFIG.SCOPE) +
+            '&state='         + encodeURIComponent(state);
+
+        location.href = url;
+    }
+
+    /* ================= 2. 回调：用 code 换 token ================= */
+    async function exchangeToken(code) {
+        var body = new URLSearchParams({
+            grant_type:    'authorization_code',
+            code:          code,
+            client_id:     CONFIG.CLIENT_ID,
+            client_secret: CONFIG.CLIENT_SECRET,
+            redirect_uri:  CONFIG.REDIRECT_URI
+        });
+
+        var res = await fetch(CONFIG.TOKEN_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: body
+        });
+
+        var data = await res.json().catch(function () { return {}; });
+        if (!res.ok || !data.access_token) {
+            throw new Error(data.error_description || data.error || ('换取 token 失败（HTTP ' + res.status + '）'));
+        }
+        return data.access_token;
+    }
+
+    /* ================= 3. 用 token 获取用户信息 ================= */
+    async function fetchUserInfo(token) {
+        var res = await fetch(CONFIG.USERINFO_URL, {
+            headers: { 'Authorization': 'Bearer ' + token }
+        });
+        if (res.status === 401 || res.status === 403) {
+            var e = new Error('token 已失效'); e.invalid = true; throw e;
+        }
+        var data = await res.json().catch(function () { return {}; });
+        if (!res.ok) throw new Error(data.error_description || ('获取用户信息失败（HTTP ' + res.status + '）'));
+        return data;
+    }
+
+    /* ================= 渲染 ================= */
+    function renderUser(user) {
+        $('loginSection').style.display = 'none';
+        $('logoutBtn').style.display   = 'inline-block';
+        $('userInfo').style.display    = 'flex';
+
+        var name = user.display_name || user.nickname || user.username || ('用户' + (user.user_id || ''));
+        $('userName').textContent = name;
+        $('userUuid').textContent = 'UID: ' + (user.user_id || '-') + (user.username ? ' · @' + user.username : '');
+
+        var meta = [];
+        if (user.email) {
+            meta.push(user.email + (user.email_verified ? ' <span class="verified">✓ 已验证</span>' : ' (未验证)'));
+        }
+        $('userMeta').innerHTML = meta.join('　');
+
+        var avatar = $('userAvatar');
+        if (user.avatar_url) {
+            avatar.innerHTML = '';
+            var img = new Image();
+            img.src = user.avatar_url;
+            img.alt = name;
+            img.onerror = function () {
+                avatar.innerHTML = '';
+                avatar.textContent = name.charAt(0).toUpperCase();
             };
-            return fallback;
-        } catch (err) {
-            console.error('获取用户信息失败:', err);
-            return {
-                username: '用户' + uuid.substring(0, 6),
-                uuid: uuid,
-                email: null,
-                phone: null
-            };
+            avatar.appendChild(img);
+        } else {
+            avatar.textContent = name.charAt(0).toUpperCase();
         }
     }
 
-    // ========== 渲染个人主页 ==========
-    function renderUserProfile(user) {
-        document.getElementById('loginSection').style.display = 'none';
-        document.getElementById('logoutBtn').style.display = 'inline-block';
-        document.getElementById('userInfo').style.display = 'flex';
-
-        document.getElementById('userName').textContent = user.username || '未知用户';
-        document.getElementById('userUuid').textContent = user.uuid || '';
-        const avatarText = user.username ? user.username.charAt(0).toUpperCase() : 'U';
-        document.getElementById('userAvatar').textContent = avatarText;
+    function renderGuest() {
+        $('loginSection').style.display = 'block';
+        $('logoutBtn').style.display    = 'none';
+        $('userInfo').style.display     = 'none';
     }
 
-    // ========== 退出登录 ==========
-    document.getElementById('logoutBtn').addEventListener('click', async function(e) {
-        e.preventDefault();
+    /* ================= 退出登录 ================= */
+    function logout() {
+        clearToken();
+        renderGuest();
+        status('已退出登录');
+    }
 
-        const uuid = getQueryParam('uuid');
-        const token = localStorage.getItem('orange_token_' + uuid);
+    /* ================= 主流程 ================= */
+    async function main() {
+        $('loginBtn').addEventListener('click', function (e) { e.preventDefault(); startLogin(); });
+        $('logoutBtn').addEventListener('click', function (e) { e.preventDefault(); logout(); });
 
-        if (token) {
+        var params = new URLSearchParams(location.search);
+        var code  = params.get('code');
+        var state = params.get('state');
+        var error = params.get('error');
+
+        // 授权被拒绝 / 出错
+        if (error) {
+            renderGuest();
+            status('授权失败：' + (params.get('error_description') || error), 'error');
+            history.replaceState({}, '', location.pathname);
+            return;
+        }
+
+        // 回调：带 code 回来
+        if (code) {
+            if (state !== sessionStorage.getItem('oauth_state')) {
+                renderGuest();
+                status('state 校验失败，已中止（可能是 CSRF 攻击）', 'error');
+                history.replaceState({}, '', location.pathname);
+                return;
+            }
+            sessionStorage.removeItem('oauth_state');
+            history.replaceState({}, '', location.pathname); // 抹掉地址栏里的 code
+
+            status('正在登录…');
             try {
-                await fetch(`${AUTH_API_BASE}/api/logout`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ token: token })
-                });
+                var token = await exchangeToken(code);
+                setToken(token);
+                var user  = await fetchUserInfo(token);
+                localStorage.setItem(LS_USER, JSON.stringify(user));
+                renderUser(user);
+                status('登录成功', 'ok');
             } catch (err) {
-                console.error('退出登录请求失败:', err);
+                clearToken();
+                renderGuest();
+                status(err.message + '（若浏览器报 CORS 错误，需由后端代理换取 token）', 'error');
             }
-            localStorage.removeItem('orange_token_' + uuid);
+            return;
         }
 
-        removeQueryParam('uuid');
-        location.reload();
+        // 已登录：直接拉取用户信息
+        var token = getToken();
+        if (token) {
+            status('正在读取登录状态…');
+            try {
+                var u = await fetchUserInfo(token);
+                renderUser(u);
+                status('');
+            } catch (err) {
+                clearToken();
+                renderGuest();
+                status(err.invalid ? '登录已过期，请重新登录' : (err.message + '（若浏览器报 CORS 错误，需由后端代理换取 token）'), 'error');
+            }
+        } else {
+            renderGuest();
+        }
+    }
+
+    /* 预留按钮：填入 data-api 后即可自动请求 */
+    document.querySelectorAll('.btn.disabled[data-api]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            var api = btn.getAttribute('data-api');
+            if (!api) { alert('该按钮为预留位，请在 data-api 中填入接口地址后启用。'); return; }
+            fetch(api, { headers: { 'Authorization': 'Bearer ' + getToken() } })
+                .then(function (r) { return r.json(); })
+                .then(function (d) { console.log(d); })
+                .catch(function (e) { console.error(e); });
+        });
     });
 
-    // ========== 主逻辑 ==========
-    (async function main() {
-        const uuid = getQueryParam('uuid');
-
-        if (uuid) {
-            const user = await fetchUserInfo(uuid);
-            renderUserProfile(user);
-        }
-    })();
+    main();
+})();
 </script>
 
 </body>
