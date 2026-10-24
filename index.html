@@ -486,13 +486,14 @@
         TOKEN_URL:     'https://api-auth.7e.ink/oauth/token',
         USERINFO_URL:  'https://api-auth.7e.ink/oauth/userinfo',
         SCOPE:         'profile',
-        // 回调地址：默认用当前页面地址（需与认证后台登记的白名单一致）
-        // 若后台登记的是 https://orange-6lw.pages.dev/ ，请把下面这行改成固定值
-        REDIRECT_URI:  location.origin + location.pathname
+        // 回调地址：必须与认证后台登记的白名单「逐字符一致」
+        // 推荐写死，不要用当前页面地址拼接（部署路径一变就会不匹配）
+        REDIRECT_URI:  'https://orange-6lw.pages.dev/'
     };
 
-    var LS_TOKEN = 'orange_access_token';
-    var LS_USER  = 'orange_user';
+    var LS_TOKEN   = 'orange_access_token';
+    var LS_REFRESH = 'orange_refresh_token';
+    var LS_USER    = 'orange_user';
 
     /* ================= 工具 ================= */
     var $ = function (id) { return document.getElementById(id); };
@@ -511,9 +512,17 @@
         }).join('');
     }
 
-    function getToken() { return localStorage.getItem(LS_TOKEN); }
-    function setToken(t) { localStorage.setItem(LS_TOKEN, t); }
-    function clearToken() { localStorage.removeItem(LS_TOKEN); localStorage.removeItem(LS_USER); }
+    function getToken()   { return localStorage.getItem(LS_TOKEN); }
+    function getRefresh() { return localStorage.getItem(LS_REFRESH); }
+    function saveTokens(data) {
+        localStorage.setItem(LS_TOKEN, data.access_token);
+        if (data.refresh_token) localStorage.setItem(LS_REFRESH, data.refresh_token);
+    }
+    function clearToken() {
+        localStorage.removeItem(LS_TOKEN);
+        localStorage.removeItem(LS_REFRESH);
+        localStorage.removeItem(LS_USER);
+    }
 
     /* ================= 1. 发起登录 ================= */
     function startLogin() {
@@ -526,6 +535,10 @@
             '&response_type=code' +
             '&scope='         + encodeURIComponent(CONFIG.SCOPE) +
             '&state='         + encodeURIComponent(state);
+
+        // 调试用：把完整授权 URL 打到控制台，便于与后台白名单逐字比对
+        console.log('[OAuth] 授权 URL：', url);
+        console.log('[OAuth] redirect_uri =', JSON.stringify(CONFIG.REDIRECT_URI));
 
         location.href = url;
     }
@@ -550,6 +563,32 @@
         if (!res.ok || !data.access_token) {
             throw new Error(data.error_description || data.error || ('换取 token 失败（HTTP ' + res.status + '）'));
         }
+        saveTokens(data);
+        return data.access_token;
+    }
+
+    /* ================= 2b. 用 refresh_token 续期 ================= */
+    async function refreshAccessToken() {
+        var rt = getRefresh();
+        if (!rt) { var e0 = new Error('无 refresh_token'); e0.invalid = true; throw e0; }
+
+        var body = new URLSearchParams({
+            grant_type:    'refresh_token',
+            refresh_token: rt,
+            client_id:     CONFIG.CLIENT_ID,
+            client_secret: CONFIG.CLIENT_SECRET
+        });
+
+        var res  = await fetch(CONFIG.TOKEN_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: body
+        });
+        var data = await res.json().catch(function () { return {}; });
+        if (!res.ok || !data.access_token) {
+            var e = new Error('登录已过期，请重新登录'); e.invalid = true; throw e;
+        }
+        saveTokens(data);
         return data.access_token;
     }
 
@@ -572,9 +611,11 @@
         $('logoutBtn').style.display   = 'inline-block';
         $('userInfo').style.display    = 'flex';
 
-        var name = user.display_name || user.nickname || user.username || ('用户' + (user.user_id || ''));
+        // 官方字段：id / user_id / sub 三者值相同；display_name；avatar_url；email；email_verified
+        var uid  = user.user_id || user.id || user.sub || '-';
+        var name = user.display_name || user.username || ('用户' + uid);
         $('userName').textContent = name;
-        $('userUuid').textContent = 'UID: ' + (user.user_id || '-') + (user.username ? ' · @' + user.username : '');
+        $('userUuid').textContent = 'UID: ' + uid + (user.username ? ' · @' + user.username : '');
 
         var meta = [];
         if (user.email) {
@@ -643,7 +684,6 @@
             status('正在登录…');
             try {
                 var token = await exchangeToken(code);
-                setToken(token);
                 var user  = await fetchUserInfo(token);
                 localStorage.setItem(LS_USER, JSON.stringify(user));
                 renderUser(user);
@@ -665,9 +705,24 @@
                 renderUser(u);
                 status('');
             } catch (err) {
-                clearToken();
-                renderGuest();
-                status(err.invalid ? '登录已过期，请重新登录' : (err.message + '（若浏览器报 CORS 错误，需由后端代理换取 token）'), 'error');
+                if (err.invalid) {
+                    // token 过期：尝试用 refresh_token 静默续期
+                    try {
+                        var nt = await refreshAccessToken();
+                        var u2 = await fetchUserInfo(nt);
+                        localStorage.setItem(LS_USER, JSON.stringify(u2));
+                        renderUser(u2);
+                        status('');
+                    } catch (err2) {
+                        clearToken();
+                        renderGuest();
+                        status('登录已过期，请重新登录', 'error');
+                    }
+                } else {
+                    clearToken();
+                    renderGuest();
+                    status(err.message + '（若浏览器报 CORS 错误，需由后端代理换取 token）', 'error');
+                }
             }
         } else {
             renderGuest();
@@ -692,3 +747,4 @@
 
 </body>
 </html>
+
